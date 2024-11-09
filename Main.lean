@@ -1,6 +1,5 @@
 import Hypergraph
+import Mathlib.Data.Finset.Basic
 
 def main : IO Unit :=
-  let hg := Hypergraph.mk {1, 2, 3, 4} {{1, 2}, {3, 4}, {2, 3}}
-  IO.println s!"Hello, {hello}!"
-  -- IO.println s!"Hypergraph is acyclic: {isAcyclic hg}"
+  IO.println s!"Hello"

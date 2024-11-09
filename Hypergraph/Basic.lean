@@ -1,14 +1,23 @@
 import Mathlib.Data.Set.Basic
 import Mathlib.Data.Set.Pairwise.Basic
+import Mathlib.Data.Set.Card
+import Mathlib.Data.Finset.Basic
 
-structure Hypergraph (α : Type) where
-  nodes : Set α
-  hyperedges : Set (Set α)
+structure ComputableHypergraph (α : Type) [DecidableEq α] where
+  nodes : Finset α
+  hyperedges : Finset (Finset α)
 
-def setsIntersect {α : Type} (s1 s2 : Set α) : Prop :=
-  (s1 ∩ s2).Nonempty
+def computableNumNodes {α : Type} [DecidableEq α] (hg : ComputableHypergraph α) : Nat :=
+  hg.nodes.card
 
--- def isAcyclic {α : Type} [DecidableEq α] (hg : Hypergraph α) : Bool :=
---   hg.hyperedges.Pairwise (λ e1 e2 => ¬ setsIntersect e1 e2)
+def computableNumHyperedges {α : Type} [DecidableEq α] (hg : ComputableHypergraph α) : Nat :=
+  hg.hyperedges.card
 
-def hello := "world"
+variable [DecidableEq ℕ]
+
+def exampleHypergraph : ComputableHypergraph ℕ :=
+  { nodes := Finset.range 6,  -- {0, 1, 2, 3, 4, 5}
+    hyperedges := insert (insert 0 (insert 1 (insert 2 Finset.empty))) Finset.empty}  -- {{0, 1, 2}}
+
+#eval computableNumNodes exampleHypergraph      -- Outputs 6
+#eval computableNumHyperedges exampleHypergraph -- Outputs 1
