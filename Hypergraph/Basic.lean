@@ -13,11 +13,30 @@ def computableNumNodes {α : Type} [DecidableEq α] (hg : ComputableHypergraph �
 def computableNumHyperedges {α : Type} [DecidableEq α] (hg : ComputableHypergraph α) : Nat :=
   hg.hyperedges.card
 
-variable [DecidableEq ℕ]
+def addNode [DecidableEq ℕ] (hg : ComputableHypergraph ℕ) (node : ℕ) : ComputableHypergraph ℕ :=
+  { nodes := insert node hg.nodes,
+    hyperedges := hg.hyperedges }
 
-def exampleHypergraph : ComputableHypergraph ℕ :=
+def createHyperedge {α : Type} [DecidableEq α] (nodes : List α) : Finset α :=
+  nodes.foldr insert Finset.empty
+
+def addEdge [DecidableEq ℕ] (hg : ComputableHypergraph ℕ) (edge : Finset ℕ) : ComputableHypergraph ℕ :=
+  { nodes := hg.nodes,
+    hyperedges := insert edge hg.hyperedges }
+
+-- Below are test --
+
+def initialHypergraph : ComputableHypergraph ℕ :=
   { nodes := Finset.range 6,  -- {0, 1, 2, 3, 4, 5}
-    hyperedges := insert (insert 0 (insert 1 (insert 2 Finset.empty))) Finset.empty}  -- {{0, 1, 2}}
+    hyperedges := Finset.empty }
 
-#eval computableNumNodes exampleHypergraph      -- Outputs 6
-#eval computableNumHyperedges exampleHypergraph -- Outputs 1
+def updatedHypergraph1 : ComputableHypergraph ℕ :=
+  addNode initialHypergraph 6  -- Adds node '6'
+
+#eval computableNumNodes updatedHypergraph1      -- Outputs 6
+
+def newEdge : Finset ℕ := createHyperedge [0, 1, 3, 5]  -- Assuming createHyperedge is defined
+def updatedHypergraph2 : ComputableHypergraph ℕ :=
+  addEdge updatedHypergraph1 newEdge  -- Adds edge {0, 1}
+
+#eval computableNumHyperedges updatedHypergraph2 -- Outputs 1
