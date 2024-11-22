@@ -2,24 +2,18 @@ import Mathlib.Data.Set.Basic
 import Mathlib.Data.Set.Pairwise.Basic
 import Mathlib.Data.Set.Card
 import Mathlib.Data.Finset.Basic
+import Init.Prelude
 
 open Finset
 
 -- Definition: computable hypergraph
 -- DecidableEq is essential for equality comparasion
-structure ComputableHypergraph (α : Type) [DecidableEq α] where
+structure ComputableHypergraph (α : Type) where
   nodes : Finset α
   hyperedges : Finset (Finset α)
+deriving DecidableEq
 
-instance [DecidableEq α] : DecidableEq (ComputableHypergraph α) :=
-  fun g h =>
-    if h1 : g.nodes = h.nodes then
-      if h2 : g.hyperedges = h.hyperedges then
-        isTrue (by simp [h1, h2])
-      else
-        isFalse (by simp [h2])
-    else
-      isFalse (by simp [h1])
+#check instDecidableEqComputableHypergraph
 
 -- Helper function: add node into hypergraph
 -- DecidableEq is essential for equality comparasion
