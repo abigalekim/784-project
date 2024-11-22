@@ -5,64 +5,53 @@ import Mathlib.Data.Finset.Basic
 
 open Finset
 
+-- Definition: computable hypergraph
+-- DecidableEq is essential for equality comparasion
 structure ComputableHypergraph (α : Type) [DecidableEq α] where
   nodes : Finset α
   hyperedges : Finset (Finset α)
 
-def computableNumNodes {α : Type} [DecidableEq α] (hg : ComputableHypergraph α) : Nat :=
-  hg.nodes.card
-
-def computableNumHyperedges {α : Type} [DecidableEq α] (hg : ComputableHypergraph α) : Nat :=
-  hg.hyperedges.card
-
-def addNode [DecidableEq ℕ] (hg : ComputableHypergraph ℕ) (node : ℕ) : ComputableHypergraph ℕ :=
+-- Helper function: add node into hypergraph
+-- DecidableEq is essential for equality comparasion
+-- (α : Type) means we ask users explicitly give the node type
+def addNode (α : Type) [DecidableEq α] (hg : ComputableHypergraph α) (node : α) : ComputableHypergraph α :=
   { nodes := insert node hg.nodes,
     hyperedges := hg.hyperedges }
 
-def createHyperedge {α : Type} [DecidableEq α] (nodes : List α) : Finset α :=
+-- Helper function: create hyperedge
+-- DecidableEq is essential for equality comparasion
+def createHyperedge (α : Type) [DecidableEq α] (nodes : List α) : Finset α :=
   nodes.foldr insert Finset.empty
 
-def addEdge [DecidableEq ℕ] (hg : ComputableHypergraph ℕ) (edge : Finset ℕ) : ComputableHypergraph ℕ :=
+-- Helper function: add edge into hypergraph
+-- DecidableEq is essential for equality comparasion
+def addEdge (α : Type) [DecidableEq α] (hg : ComputableHypergraph α) (edge : Finset α) : ComputableHypergraph α :=
   { nodes := hg.nodes,
     hyperedges := insert edge hg.hyperedges }
 
--- GYO algorithm --
-def findIsolatedVertices [DecidableEq α] (hg : ComputableHypergraph α) : Finset α :=
-  hg.nodes.filter (λ n => (hg.hyperedges.filter (λ e => n ∈ e)).card = 1)
+-- Debug function: used for check nodes number
+def computableNumNodes (α : Type) [DecidableEq α] (hg : ComputableHypergraph α) : Nat :=
+  hg.nodes.card
 
-def removeIsolatedVertex [DecidableEq α] (hg : ComputableHypergraph α) (v : α) : ComputableHypergraph α :=
-  let updatedHyperedges : Finset (Finset α) := hg.hyperedges.image (λ e => e.erase v)
-  let nonEmptyHyperedges : Finset (Finset α) := updatedHyperedges.filter (λ e => e.Nonempty)
-  { nodes := hg.nodes.erase v,
-    hyperedges := nonEmptyHyperedges }
+-- Debug function: used for check edges number
+def computableNumHyperedges (α : Type) [DecidableEq α] (hg : ComputableHypergraph α) : Nat :=
+  hg.hyperedges.card
 
--- def removeRedundantHyperedges [DecidableEq α] (hg : ComputableHypergraph α) : ComputableHypergraph α :=
---   let redundantEdges := hg.hyperedges.filter (λ e => hg.hyperedges.any (λ f => e < f))
---   { nodes := hg.nodes,
---     hyperedges := hg.hyperedges.filter (λ e => ¬redundantEdges.contains e) }
-
--- def gyoAlgorithm [DecidableEq α] (hg : ComputableHypergraph α) : Bool :=
---   let rec loop (g : ComputableHypergraph α) : ComputableHypergraph α :=
---     let isolated := findIsolatedVertices g
---     let g := isolated.fold (λ acc v => removeIsolatedVertex acc v) g
---     let gNew := removeRedundantHyperedges g
---     if gNew = g then g else loop gNew
---   let finalGraph := loop hg
---   finalGraph.nodes.empty
-
+--------------------
 -- Below are test --
+--------------------
 
 def initialHypergraph : ComputableHypergraph ℕ :=
   { nodes := Finset.range 6,  -- {0, 1, 2, 3, 4, 5}
     hyperedges := Finset.empty }
 
 def updatedHypergraph1 : ComputableHypergraph ℕ :=
-  addNode initialHypergraph 6  -- Adds node '6'
+  addNode ℕ initialHypergraph 6  -- Adds node '6'
 
-#eval computableNumNodes updatedHypergraph1      -- Outputs 6
+#eval computableNumNodes ℕ updatedHypergraph1   -- Outputs 6
 
-def newEdge : Finset ℕ := createHyperedge [0, 1, 3, 5]  -- Assuming createHyperedge is defined
+def newEdge : Finset ℕ := createHyperedge ℕ [0, 1, 3, 5]
 def updatedHypergraph2 : ComputableHypergraph ℕ :=
-  addEdge updatedHypergraph1 newEdge  -- Adds edge {0, 1}
+  addEdge ℕ updatedHypergraph1 newEdge  -- Adds edge {0, 1, 3, 5}
 
-#eval computableNumHyperedges updatedHypergraph2 -- Outputs 1
+#eval computableNumHyperedges ℕ updatedHypergraph2 -- Outputs 1
