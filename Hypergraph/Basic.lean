@@ -48,7 +48,7 @@ def initialHypergraph : ComputableHypergraph ℕ :=
 def updatedHypergraph1 : ComputableHypergraph ℕ :=
   addNode ℕ initialHypergraph 6  -- Adds node '6'
 
-#eval computableNumNodes ℕ updatedHypergraph1   -- Outputs 6
+#eval computableNumNodes ℕ updatedHypergraph1   -- Outputs 7
 
 def newEdge : Finset ℕ := createHyperedge ℕ [0, 1, 3, 5]
 def updatedHypergraph2 : ComputableHypergraph ℕ :=
