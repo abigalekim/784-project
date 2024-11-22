@@ -1,5 +1,6 @@
 import Mathlib.Data.List.Basic
 import Mathlib.Data.List.Lemmas
+import Mathlib.Data.Finset.Basic
 
 -- Definition: computable hypergraph
 -- DecidableEq is essential for equality comparasion
@@ -7,15 +8,15 @@ structure ComputableHypergraph (α : Type) [DecidableEq α] where
   nodes : List α
   hyperedges : List (List α)
 
-instance [DecidableEq α] : DecidableEq (ComputableHypergraph α) :=
-  fun g h =>
-    if h1 : g.nodes = h.nodes then
-      if h2 : g.hyperedges = h.hyperedges then
-        isTrue (by simp [h1, h2])
-      else
-        isFalse (by simp [h2])
-    else
-      isFalse (by simp [h1])
+-- instance [DecidableEq α] : DecidableEq (ComputableHypergraph α) :=
+--   fun g h =>
+--     if h1 : g.nodes = h.nodes then
+--       if h2 : g.hyperedges = h.hyperedges then
+--         isTrue (by simp [h1, h2])
+--       else
+--         isFalse (by simp [h2])
+--     else
+--       isFalse (by simp [h1])
 
 -- Helper function: add node into hypergraph
 -- DecidableEq is essential for equality comparasion
@@ -29,6 +30,11 @@ def addNode (α : Type) [DecidableEq α] (hg : ComputableHypergraph α) (node : 
 def addEdge (α : Type) [DecidableEq α] (hg : ComputableHypergraph α) (edge : List α) : ComputableHypergraph α :=
   { nodes := hg.nodes,
     hyperedges := edge :: hg.hyperedges }
+
+-- Helper function: equality
+def hypergraphEqual {α : Type} [DecidableEq α] (g1 g2 : ComputableHypergraph α) : Bool :=
+  g1.nodes = g2.nodes ∧ g1.hyperedges = g2.hyperedges
+
 
 -- Debug function: used for check nodes number
 def computableNumNodes (α : Type) [DecidableEq α] (hg : ComputableHypergraph α) : Nat :=
