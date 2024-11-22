@@ -2,6 +2,7 @@ import Mathlib.Data.Set.Basic
 import Mathlib.Data.Set.Pairwise.Basic
 import Mathlib.Data.Set.Card
 import Mathlib.Data.Finset.Basic
+import Init.Prelude
 
 open Finset
 
@@ -11,6 +12,8 @@ structure ComputableHypergraph (α : Type) where
   nodes : Finset α
   hyperedges : Finset (Finset α)
 deriving DecidableEq
+
+#check instDecidableEqComputableHypergraph
 
 -- Helper function: add node into hypergraph
 -- DecidableEq is essential for equality comparasion

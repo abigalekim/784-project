@@ -9,17 +9,21 @@ def findVerticesOneHyperEdge (α : Type) [DecidableEq α] (hg : ComputableHyperg
   hg.nodes.filter (λ n => (hg.hyperedges.filter (λ e => n ∈ e)).card = 1)
 
 def isGamma (α : Type) [DecidableEq α] (hg : ComputableHypergraph α) : Bool :=
-  let rec loop (g : ComputableHypergraph α) : ComputableHypergraph α :=
-    let old_g := g
-    let isolatedZeroVertices := findVerticesNoHyperEdge g
-    let isolatedOneVertices := findVerticesOneHyperEdge g
-    let isolatedVertices := isolatedOneVertices ∪ isolatedZeroVertices
-    let noIsolatedHyperEdges := g.hyperedges.map (λ n => n \ isolatedOneVertices)
-    let g := { nodes := g.nodes \ isolatedVertices, hyperedges := noIsolatedHyperEdges }
-    let newHyperEdges := g.hyperedges.filter (λ e => (g.hyperedges.filter (λ f =>  e ⊆ f ∨ e ∩ f ≠ ∅)).card >= 1)
-    let g := { nodes := g.nodes, hyperedges := newHyperEdges }
+  let rec loop (g : ComputableHypergraph α) (iter : Nat) : ComputableHypergraph α :=
+    match iter with
+    | 0 => g
+    | val + 1 =>
+      let old_g := g
+      let isolatedZeroVertices := findVerticesNoHyperEdge α g
+      let isolatedOneVertices := findVerticesOneHyperEdge α g
+      let isolatedVertices := isolatedOneVertices ∪ isolatedZeroVertices
+      let noIsolatedHyperEdges := g.hyperedges.image (λ n => n \ isolatedOneVertices)
+      let g : ComputableHypergraph α := { nodes := g.nodes \ isolatedVertices, hyperedges := noIsolatedHyperEdges }
+      let newHyperEdges := g.hyperedges.filter (λ e => (g.hyperedges.filter (λ f =>  e ⊆ f ∨ e ∩ f ≠ ∅)).card >= 1)
+      let g := { nodes := g.nodes, hyperedges := newHyperEdges }
 
-    if old_g = g then g else loop g
+      if old_g = g then g else loop g val
 
-  let finalGraph := loop hg
+  let maxIters : Nat := (hg.nodes.card + hg.hyperedges.card)
+  let finalGraph := loop hg maxIters
   finalGraph.nodes = ∅
