@@ -1,63 +1,58 @@
-import Mathlib.Data.List.Basic
-import Mathlib.Data.List.Lemmas
+import Mathlib.Data.Set.Basic
+import Mathlib.Data.Set.Pairwise.Basic
+import Mathlib.Data.Set.Card
 import Mathlib.Data.Finset.Basic
+
+open Finset
 
 -- Definition: computable hypergraph
 -- DecidableEq is essential for equality comparasion
-structure ComputableHypergraph (α : Type) [DecidableEq α] where
-  nodes : List α
-  hyperedges : List (List α)
-
--- instance [DecidableEq α] : DecidableEq (ComputableHypergraph α) :=
---   fun g h =>
---     if h1 : g.nodes = h.nodes then
---       if h2 : g.hyperedges = h.hyperedges then
---         isTrue (by simp [h1, h2])
---       else
---         isFalse (by simp [h2])
---     else
---       isFalse (by simp [h1])
+structure ComputableHypergraph (α : Type) where
+  nodes : Finset α
+  hyperedges : Finset (Finset α)
+deriving DecidableEq
 
 -- Helper function: add node into hypergraph
 -- DecidableEq is essential for equality comparasion
 -- (α : Type) means we ask users explicitly give the node type
 def addNode (α : Type) [DecidableEq α] (hg : ComputableHypergraph α) (node : α) : ComputableHypergraph α :=
-  { nodes := node :: hg.nodes,
+  { nodes := insert node hg.nodes,
     hyperedges := hg.hyperedges }
+
+-- Helper function: create hyperedge
+-- DecidableEq is essential for equality comparasion
+def createHyperedge (α : Type) [DecidableEq α] (nodes : List α) : Finset α :=
+  nodes.foldr insert Finset.empty
 
 -- Helper function: add edge into hypergraph
 -- DecidableEq is essential for equality comparasion
-def addEdge (α : Type) [DecidableEq α] (hg : ComputableHypergraph α) (edge : List α) : ComputableHypergraph α :=
+def addEdge (α : Type) [DecidableEq α] (hg : ComputableHypergraph α) (edge : Finset α) : ComputableHypergraph α :=
   { nodes := hg.nodes,
-    hyperedges := edge :: hg.hyperedges }
-
--- Helper function: equality
-def hypergraphEqual {α : Type} [DecidableEq α] (g1 g2 : ComputableHypergraph α) : Bool :=
-  g1.nodes = g2.nodes ∧ g1.hyperedges = g2.hyperedges
-
+    hyperedges := insert edge hg.hyperedges }
 
 -- Debug function: used for check nodes number
 def computableNumNodes (α : Type) [DecidableEq α] (hg : ComputableHypergraph α) : Nat :=
-  hg.nodes.length
+  hg.nodes.card
 
 -- Debug function: used for check edges number
 def computableNumHyperedges (α : Type) [DecidableEq α] (hg : ComputableHypergraph α) : Nat :=
-  hg.hyperedges.length
+  hg.hyperedges.card
 
 --------------------
 -- Below are test --
 --------------------
 
 def initialHypergraph : ComputableHypergraph ℕ :=
-  { nodes := [0, 1, 2, 3, 4, 5],  -- {0, 1, 2, 3, 4, 5}
-    hyperedges := [] }
+  { nodes := Finset.range 6,  -- {0, 1, 2, 3, 4, 5}
+    hyperedges := Finset.empty }
 
 def updatedHypergraph1 : ComputableHypergraph ℕ :=
   addNode ℕ initialHypergraph 6  -- Adds node '6'
 
 #eval computableNumNodes ℕ updatedHypergraph1   -- Outputs 7
 
+def newEdge : Finset ℕ := createHyperedge ℕ [0, 1, 3, 5]
 def updatedHypergraph2 : ComputableHypergraph ℕ :=
-  addEdge ℕ updatedHypergraph1 [0, 1, 3, 5]  -- Adds edge {0, 1, 3, 5}
+  addEdge ℕ updatedHypergraph1 newEdge  -- Adds edge {0, 1, 3, 5}
 
 #eval computableNumHyperedges ℕ updatedHypergraph2 -- Outputs 1
