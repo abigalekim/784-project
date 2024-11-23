@@ -6,6 +6,8 @@ import Init.Prelude
 
 open Finset
 
+open Finset
+
 -- Definition: computable hypergraph
 -- DecidableEq is essential for equality comparasion
 structure ComputableHypergraph (α : Type) where
