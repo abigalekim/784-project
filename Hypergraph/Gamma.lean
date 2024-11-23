@@ -20,7 +20,7 @@ def isGammaAcyclic (α : Type) [DecidableEq α] (hg : ComputableHypergraph α) :
       let isolatedVertices := isolatedOneVertices ∪ isolatedZeroVertices
       let noIsolatedHyperEdges := g.hyperedges.image (λ n => n \ isolatedOneVertices)
       let g : ComputableHypergraph α := { nodes := g.nodes \ isolatedVertices, hyperedges := noIsolatedHyperEdges }
-      let newHyperEdges := g.hyperedges.filter (λ e => (g.hyperedges.filter (λ f =>  e ⊆ f ∨ e ∩ f ≠ ∅)).card >= 1)
+      let newHyperEdges := g.hyperedges.filter (λ e => (g.hyperedges.filter (λ f =>  e ⊆ f ∨ e ∩ f = ∅)).card >= 1)
       let g := { nodes := g.nodes, hyperedges := newHyperEdges }
 
       if old_g = g then g else loop g val
