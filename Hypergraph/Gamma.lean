@@ -1,4 +1,5 @@
 import Hypergraph.Basic
+import Hypergraph.TestGraphs
 open Finset
 
 def findVerticesNoHyperEdge (α : Type) [DecidableEq α] (hg : ComputableHypergraph α) :  Finset α :=
@@ -31,3 +32,9 @@ def isGammaAcyclic (α : Type) [DecidableEq α] (hg : ComputableHypergraph α) :
 --------------------
 -- Below are test --
 --------------------
+#eval isGammaAcyclic ℕ braultBaronAHyperGraph
+#eval isGammaAcyclic ℕ braultBaronBHyperGraph
+#eval isGammaAcyclic ℕ braultBaronCHyperGraph
+#eval isGammaAcyclic ℕ braultBaronDHyperGraph
+#eval isGammaAcyclic ℕ braultBaronEHyperGraph
+#eval isGammaAcyclic ℕ braultBaronFHyperGraph
