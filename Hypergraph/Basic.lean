@@ -2,6 +2,9 @@ import Mathlib.Data.Set.Basic
 import Mathlib.Data.Set.Pairwise.Basic
 import Mathlib.Data.Set.Card
 import Mathlib.Data.Finset.Basic
+import Init.Prelude
+
+open Finset
 
 open Finset
 
