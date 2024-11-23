@@ -49,3 +49,35 @@ partial def recursiveRemoval (α : Type) [DecidableEq α] (hg : ComputableHyperg
 def gyoAlgorithm (α : Type) [DecidableEq α] (hg : ComputableHypergraph α) : Bool :=
   let finalGraph := recursiveRemoval α hg
   ¬ finalGraph.nodes.Nonempty
+
+----------------
+-- Unit Tests --
+----------------
+
+-- Testing: findIsolatedVertices
+def sampleHypergraph : ComputableHypergraph ℕ :=
+  { nodes := {1, 2, 3},
+    hyperedges := { {1, 2}, {2, 3}, {1, 3} } }
+
+#eval findIsolatedVertices ℕ sampleHypergraph   -- Expected Output: ∅
+
+-- Sample hypergraph with an isolated vertex
+def sampleHypergraphWithIsolated : ComputableHypergraph ℕ :=
+  { nodes := {1, 2, 3, 4, 5},
+    hyperedges := { {1, 2}, {2, 3}, {4}, {5} } }
+
+#eval findIsolatedVertices ℕ sampleHypergraphWithIsolated -- Expected Output: {1, 3, 4, 5}
+
+def hgAfterRemoval := removeIsolatedVerticesAndEdges ℕ sampleHypergraphWithIsolated {1, 3, 4, 5}
+
+#eval hgAfterRemoval.nodes -- Expected {2}
+#eval hgAfterRemoval.hyperedges -- Expected {{2}}
+
+def sampleHypergraphWithIncludedEdges : ComputableHypergraph ℕ :=
+  { nodes := {1, 2, 3, 4, 5},
+    hyperedges := { {1, 2}, {1, 2, 3}, {4}, {5}, {4, 5} } }
+
+def hypergraphAfterRemoveIncludedEdges := removeIncludedHyperedges ℕ sampleHypergraphWithIncludedEdges
+#eval hypergraphAfterRemoveIncludedEdges.hyperedges -- Expected Output: Hyperedge {{1, 2, 3}, {4, 5}} removed
+
+#eval gyoAlgorithm ℕ sampleHypergraph -- Expected false
