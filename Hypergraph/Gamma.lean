@@ -8,7 +8,7 @@ def findVerticesNoHyperEdge (α : Type) [DecidableEq α] (hg : ComputableHypergr
 def findVerticesOneHyperEdge (α : Type) [DecidableEq α] (hg : ComputableHypergraph α) : Finset α :=
   hg.nodes.filter (λ n => (hg.hyperedges.filter (λ e => n ∈ e)).card = 1)
 
-def isGamma (α : Type) [DecidableEq α] (hg : ComputableHypergraph α) : Bool :=
+def isGammaAcyclic (α : Type) [DecidableEq α] (hg : ComputableHypergraph α) : Bool :=
   let rec loop (g : ComputableHypergraph α) (iter : Nat) : ComputableHypergraph α :=
     match iter with
     | 0 => g
@@ -27,3 +27,7 @@ def isGamma (α : Type) [DecidableEq α] (hg : ComputableHypergraph α) : Bool :
   let maxIters : Nat := (hg.nodes.card + hg.hyperedges.card)
   let finalGraph := loop hg maxIters
   finalGraph.nodes = ∅
+
+--------------------
+-- Below are test --
+--------------------
