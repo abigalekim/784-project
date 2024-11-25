@@ -1,6 +1,6 @@
 import Hypergraph.Basic
+import Hypergraph.TestGraphs
 import Mathlib.Data.List.Basic
-import Mathlib.Data.List.Lemmas
 
 -------------------
 -- GYO algorithm --
@@ -46,7 +46,7 @@ partial def recursiveRemoval (α : Type) [DecidableEq α] (hg : ComputableHyperg
 
 -- GYO Algorithm: Determines if a hypergraph is acyclic
 -- Returns true if acyclic, false otherwise
-def gyoAlgorithm (α : Type) [DecidableEq α] (hg : ComputableHypergraph α) : Bool :=
+def isAlphaAcylic (α : Type) [DecidableEq α] (hg : ComputableHypergraph α) : Bool :=
   let finalGraph := recursiveRemoval α hg
   ¬ finalGraph.nodes.Nonempty
 
@@ -80,4 +80,14 @@ def sampleHypergraphWithIncludedEdges : ComputableHypergraph ℕ :=
 def hypergraphAfterRemoveIncludedEdges := removeIncludedHyperedges ℕ sampleHypergraphWithIncludedEdges
 #eval hypergraphAfterRemoveIncludedEdges.hyperedges -- Expected Output: Hyperedge {{1, 2, 3}, {4, 5}} removed
 
-#eval gyoAlgorithm ℕ sampleHypergraph -- Expected false
+#eval isAlphaAcylic ℕ sampleHypergraph -- Expected false
+
+-------------------------
+--   Correctness Test  --
+-------------------------
+#eval isAlphaAcylic ℕ braultBaronAHyperGraph   -- Expected false
+#eval isAlphaAcylic ℕ braultBaronBHyperGraph   -- Expected false
+#eval isAlphaAcylic ℕ braultBaronCHyperGraph   -- Expected true
+#eval isAlphaAcylic ℕ braultBaronDHyperGraph   -- Expected false
+#eval isAlphaAcylic ℕ braultBaronEHyperGraph   -- Expected false
+#eval isAlphaAcylic ℕ braultBaronFHyperGraph   -- Expected false
