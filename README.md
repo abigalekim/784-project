@@ -24,8 +24,21 @@ A **gamma cycle** is a sequence $(E_1, x_1,\cdots, E_n, x_n) (n\geq 3)$ where th
 
 
 # Relationships
-Cycle striction:
+Cycle restriction:
 $$\alpha \subset \beta \subset \gamma$$
 
 Acyclicity:
 $$\gamma \subset \beta \subset \alpha$$
+
+# Example (Acylic)
+![example](./img/example.png)
+
+| ID           | $\alpha$ Acylic| $\beta$ Acylic| $\gamma$ Acylic|
+|:-------------|:--------------:|--------------:|---------------:|
+| a            |      True      |      True     |      True      |
+| b            |      True      |      True     |      False     |
+| c            |      True      |      False    |      False     |
+| d            |      False     |     False     |      False     |
+| e            |      False     |     False     |      False     |
+| f            |      False     |     False     |      False     |
+
