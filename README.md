@@ -6,7 +6,7 @@ where:
 - $E$ is a set of hyperedges, where each hyperedge is a subset of $V$, i.e., $E \subseteq \mathcal{P}(V)$.
 
 # Alpha $\alpha$ Cycle
-An **alpha cycle** is a sequence of hyperedges $ (E_1, E_2, \ldots, E_k) $ such that:
+An **alpha cycle** is a sequence of hyperedges $(E_1, E_2, \ldots, E_k)$ such that:
 1. For each pair of consecutive hyperedges $ E_i $ and $ E_{i+1} $ (we identify $E_{n+1}$ with $E_1$), their intersection is non-empty:
    $$e_i \cap e_{i+1} \neq \emptyset, \quad \forall i \in \{1, 2, \ldots, k\}$$
 2. All hyperedges in the cycle are distinct:
