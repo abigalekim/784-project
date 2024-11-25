@@ -7,7 +7,7 @@ where:
 
 # Alpha $\alpha$ Cycle
 An **alpha cycle** is a sequence of hyperedges $(E_1, E_2, \ldots, E_k)$ such that:
-1. For each pair of consecutive hyperedges $ E_i $ and $ E_{i+1} $ (we identify $E_{n+1}$ with $E_1$), their intersection is non-empty:
+1. For each pair of consecutive hyperedges $E_i$ and $E_{i+1}$ (we identify $E_{n+1}$ with $E_1$), their intersection is non-empty:
    $$e_i \cap e_{i+1} \neq \emptyset, \quad \forall i \in \{1, 2, \ldots, k\}$$
 2. All hyperedges in the cycle are distinct:
    $$e_i \neq e_j \quad\text{for } i \neq j$$
