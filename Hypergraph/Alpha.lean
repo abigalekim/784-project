@@ -85,8 +85,8 @@ def hypergraphAfterRemoveIncludedEdges := removeIncludedHyperedges ℕ sampleHyp
 -------------------------
 --   Correctness Test  --
 -------------------------
-#eval isAlphaAcylic ℕ braultBaronAHyperGraph   -- Expected false
-#eval isAlphaAcylic ℕ braultBaronBHyperGraph   -- Expected false
+#eval isAlphaAcylic ℕ braultBaronAHyperGraph   -- Expected true
+#eval isAlphaAcylic ℕ braultBaronBHyperGraph   -- Expected true
 #eval isAlphaAcylic ℕ braultBaronCHyperGraph   -- Expected true
 #eval isAlphaAcylic ℕ braultBaronDHyperGraph   -- Expected false
 #eval isAlphaAcylic ℕ braultBaronEHyperGraph   -- Expected false

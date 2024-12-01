@@ -5,7 +5,10 @@ open Finset
 def findVerticesNestEdge (α : Type) [DecidableEq α] (hg : ComputableHypergraph α) : Finset α :=
   hg.nodes.filter (λ n =>
     let edges := hg.hyperedges.filter (λ e => n ∈ e)
-    (edges.filter (λ e => ∃ other ∈ hg.hyperedges, (other ≠ e) ∧ (e ⊆ other))).card > 0
+    (edges.filter (λ e =>
+      let exclude_self := edges \ {e}
+      exclude_self.Nonempty &&
+      ∀ other ∈ exclude_self, (e ⊆ other || other ⊆ e))).card = edges.card
     )
 
 def isBetaAcyclic (α : Type) [DecidableEq α] (hg : ComputableHypergraph α) : Bool :=
@@ -18,8 +21,8 @@ def isBetaAcyclic (α : Type) [DecidableEq α] (hg : ComputableHypergraph α) : 
       let nestedEdgeVertices := findVerticesNestEdge α g
       let noNestedEdges := g.hyperedges.image (λ n => n \ nestedEdgeVertices)
       let g : ComputableHypergraph α := { nodes := g.nodes \ nestedEdgeVertices, hyperedges := noNestedEdges }
-      -- remove empty hyperedges
-      let newHyperEdges := g.hyperedges.filter (λ e => e ≠ ∅)
+      -- remove empty hyperedges or singleton edges
+      let newHyperEdges := g.hyperedges.filter (λ e => e.card > 1)
       let g := { nodes := g.nodes, hyperedges := newHyperEdges }
 
       if old_g = g then g else loop g val
