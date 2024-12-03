@@ -21,6 +21,7 @@ def isGammaAcyclic (α : Type) [DecidableEq α] (hg : ComputableHypergraph α) :
       let noIsolatedHyperEdges := g.hyperedges.image (λ n => n \ isolatedOneVertices)
       let g : ComputableHypergraph α := { nodes := g.nodes \ isolatedVertices, hyperedges := noIsolatedHyperEdges }
       let newHyperEdges := g.hyperedges.filter (λ e => (g.hyperedges.filter (λ f =>  e ⊆ f ∨ e ∩ f = ∅)).card >= 1)
+      let newHyperEdges := g.hyperedges \ newHyperEdges
       let g := { nodes := g.nodes, hyperedges := newHyperEdges }
 
       if old_g = g then g else loop g val
@@ -32,6 +33,7 @@ def isGammaAcyclic (α : Type) [DecidableEq α] (hg : ComputableHypergraph α) :
 --------------------
 -- Below are test --
 --------------------
+#eval findVerticesNoHyperEdge ℕ braultBaronBHyperGraph
 #eval isGammaAcyclic ℕ braultBaronAHyperGraph
 #eval isGammaAcyclic ℕ braultBaronBHyperGraph
 #eval isGammaAcyclic ℕ braultBaronCHyperGraph
