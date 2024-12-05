@@ -1,7 +1,6 @@
 import Hypergraph.Basic
 import Hypergraph.TestGraphs
 import Mathlib.Tactic.Linarith
-import MathLib.Algebra.NeZero
 open Finset
 
 --set_option diagnostics true in
