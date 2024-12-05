@@ -2,6 +2,26 @@ import Hypergraph.Basic
 import Hypergraph.TestGraphs
 open Finset
 
+structure BetaCycle (α : Type) [DecidableEq α] (G : ComputableHypergraph α) where
+  n : Nat
+  hn : n >= 3
+  E : Fin n -> Finset α
+  E_distinct : ∀ i j : Fin n, E i ≠ E j
+  x : Fin n -> α
+  x_distinct : ∀ i j : Fin n, x i ≠ x j
+  cond_1 : ∀ i : Nat, ∀ j : Nat, (i_lt : i < n - 1 ∧ j < n ∧ j ≠ i ∧ j ≠ i + 1) →
+    x ⟨i,by omega⟩ ∈ E ⟨i,by omega⟩ ∧
+    x ⟨i, by omega⟩ ∈ E ⟨i+1, by omega⟩ ∧
+    x ⟨i, by omega⟩ ∉ E ⟨j, by omega⟩
+  cond_2 : ∀ j : Nat, (j_cond : j < n ∧ j ≠ n - 1 ∧ j ≠ 0) →
+    x ⟨n - 1, by omega⟩ ∈ E ⟨n - 1, by omega⟩ ∧
+    x ⟨n - 1, by omega⟩ ∈ E ⟨0, by omega⟩ ∧
+    x ⟨n - 1, by omega⟩ ∉ E ⟨j, by omega⟩
+  cond_4: ∀ i : Fin n, E i ∈ (G.hyperedges : Finset (Finset α))
+  cond_5: ∀ i : Fin n, x i ∈ (G.nodes : Finset α)
+
+def beta_acyclic_v2 (α : Type) [DecidableEq α] (G : ComputableHypergraph α) := BetaCycle α G -> False
+
 def findVerticesNestEdge (α : Type) [DecidableEq α] (hg : ComputableHypergraph α) : Finset α :=
   hg.nodes.filter (λ n =>
     let edges := hg.hyperedges.filter (λ e => n ∈ e)

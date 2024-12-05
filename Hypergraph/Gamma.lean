@@ -14,24 +14,13 @@ structure GammaCycle (α : Type) [DecidableEq α] (G : ComputableHypergraph α) 
   E_distinct : ∀ i j : Fin n, E i ≠ E j
   x : Fin n -> α
   x_distinct : ∀ i j : Fin n, x i ≠ x j
-  --cond_1 : ∀ i : Fin n,
-  --  let next := ⟨(i.val + 1) % n, Nat.mod_lt (i.val + 1) (by linarith [hn])⟩;
-  --  x i ∈ E i ∧ x next ∈ E next
   cond_1 : ∀ i : Nat, ∀ j : Nat, (i_lt : i < n - 1 ∧ j < n ∧ j ≠ i ∧ j ≠ i + 1) →
     x ⟨i,by omega⟩ ∈ E ⟨i,by omega⟩ ∧
-    x ⟨i+1, by omega⟩ ∈ E ⟨i+1, by omega⟩ ∧
+    x ⟨i, by omega⟩ ∈ E ⟨i+1, by omega⟩ ∧
     x ⟨i, by omega⟩ ∉ E ⟨j, by omega⟩
-  -- ∀ i ∈ {1, n-1}, ∀ j ∈ {1, n} where j ≠ i ∧ j ≠ i+1 -> x i ∉ E j
-  -- BETA: ∀ i ∈ {1, n}, ∀ j ∈ {1, n} where j ≠ i ∧ j ≠ i+1 -> x i ∉ E j
-  -- x (n-1) ∈ E (n-1) and x (n - 1) ∈ E 0
   cond_2 : x ⟨n - 1, by omega⟩ ∈ E ⟨n - 1, by omega⟩ ∧ x ⟨n - 1, by omega⟩ ∈ E ⟨0, by omega⟩
-
-  --cond_2 : ∀ (i j : Fin n),
-  --  let next := ⟨(i.val + 1) % n, Nat.mod_lt (i.val + 1) (by linarith [hn])⟩;
-  --  x i ∉ E j
-
-  cond_4: ∀ i : Fin n, E i ∈ (G.hyperedges : Finset (Finset α))
-  cond_5: ∀ i : Fin n, x i ∈ (G.nodes : Finset α)
+  cond_3: ∀ i : Fin n, E i ∈ (G.hyperedges : Finset (Finset α))
+  cond_4: ∀ i : Fin n, x i ∈ (G.nodes : Finset α)
 
 def gamma_acyclic_v2 (α : Type) [DecidableEq α] (G : ComputableHypergraph α) := GammaCycle α G -> False
 
