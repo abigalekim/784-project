@@ -1,6 +1,19 @@
 import Hypergraph.Basic
 import Hypergraph.TestGraphs
+import Mathlib.Tactic.Linarith
 open Finset
+
+structure GammaCycle (α : Type) [DecidableEq α] (G : ComputableHypergraph α) where
+  n : Nat
+  hn : n >= 3
+  E : Fin n -> Finset α
+  E_distinct : ∀ i j : Fin n, E i ≠ E j
+  x : Fin n -> α
+  x_distinct : ∀ i j : Fin n, x i ≠ x j
+  cond_1 : ∀ i : Fin n,
+    let next := ⟨(i.val + 1) % n, Nat.mod_lt (i.val + 1) (by linarith [hn])⟩;
+    x i ∈ E i ∧ x next ∈ E next
+    -- for [1, n-1] we want to show that x i is not in any other E j other than the 2 in the cycle
 
 def findVerticesNoHyperEdge (α : Type) [DecidableEq α] (hg : ComputableHypergraph α) :  Finset α :=
   let verticesInHyperedges : Finset α := hg.hyperedges.biUnion id
