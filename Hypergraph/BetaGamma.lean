@@ -29,6 +29,7 @@ theorem converse_gamma_implies_beta {α : Type} [DecidableEq α] (G : Computable
     have h_beta_cycle := get_beta_cycle α G h
     have h_gamma_cycle := convert_beta_to_gamma_cycle α G h_beta_cycle
     have convert_to_gamma_acyclicity := convert_gamma_contrapositive α G h_gamma_cycle
+    exact convert_to_gamma_acyclicity
 
 theorem gamma_implies_beta (α : Type) [DecidableEq α] (G : ComputableHypergraph α)
   (h : gamma_acyclic_v2 α G) : beta_acyclic_v2 α G := by
