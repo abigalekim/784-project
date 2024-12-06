@@ -9,6 +9,17 @@ def convert_beta_contrapositive {α : Type} [DecidableEq α] (G : ComputableHype
   (bc : BetaCycle α G) : ¬beta_acyclic_v2 α G :=
   fun h => h bc
 
+def convert_gamma_contrapositive {α : Type} [DecidableEq α] (G : ComputableHypergraph α)
+  (bc : GammaCycle α G) : ¬gamma_acyclic_v2 α G :=
+  fun h => h bc
+
+--def get_beta_cycle {α : Type} [DecidableEq α] (G : ComputableHypergraph α)
+--  (h : ¬ beta_acyclic_v2 α G) : BetaCycle α G := by
+--  have h_contra : ¬ (BetaCycle α G -> False) := by
+--    simp [*]
+--    exact h
+--  Classical.choose h_contra
+
 theorem converse_gamma_implies_beta {α : Type} [DecidableEq α] (G : ComputableHypergraph α)
   (h : ¬ beta_acyclic_v2 α G) : ¬ gamma_acyclic_v2 α G := by sorry
 
