@@ -3,19 +3,24 @@ import Hypergraph.Beta
 import Hypergraph.Gamma
 import Mathlib.Tactic.Contrapose
 import Init.Classical
+import Mathlib.Logic.IsEmpty
 
 open Finset
 
 def convert_beta_contrapositive (α : Type) (G : ComputableHypergraph α)
   (bc : BetaCycle α G) : ¬beta_acyclic_v2 α G :=
-  fun h => h bc
+  fun h => IsEmpty.elim h bc
 
 def convert_gamma_contrapositive (α : Type) (G : ComputableHypergraph α)
   (bc : GammaCycle α G) : ¬gamma_acyclic_v2 α G :=
-  fun h => h bc
+  fun h => IsEmpty.elim h bc
 
-def get_beta_cycle (α : Type) (G : ComputableHypergraph α)
-  (h : ¬ beta_acyclic_v2 α G) : BetaCycle α G := by sorry
+noncomputable def get_beta_cycle (α : Type) (G : ComputableHypergraph α)
+  (h : ¬ beta_acyclic_v2 α G) : BetaCycle α G := by
+    rw [beta_acyclic_v2] at h
+    have non_empty_beta_acyclic : Nonempty (BetaCycle α G) := not_isEmpty_iff.mp h
+    have result := Classical.choice non_empty_beta_acyclic
+    exact result
     --have there_exists_beta_cycle : (∃ c : BetaCycle α G, beta_acyclic_v2 α G) := by sorry
     --have beta_val := Classical.choice there_exists_beta_cycle
     --exact beta_val
@@ -49,8 +54,10 @@ theorem converse_gamma_implies_beta {α : Type} [DecidableEq α] (G : Computable
 
 theorem gamma_implies_beta (α : Type) [DecidableEq α] (G : ComputableHypergraph α)
   (h : gamma_acyclic_v2 α G) : beta_acyclic_v2 α G := by
-  intro h_contra
-  have convert_h_contra := convert_beta_contrapositive α G h_contra
-  have h_not_gamma : ¬ gamma_acyclic_v2 α G :=
-    converse_gamma_implies_beta G convert_h_contra
-  contradiction
+  rw [gamma_acyclic_v2, beta_acyclic_v2] at *
+  by_contra h_contra
+  have h_not_gamma : ¬IsEmpty (GammaCycle α G) :=
+    converse_gamma_implies_beta G h_contra
+  have gamma_cycle_instance : GammaCycle α G :=
+    Classical.choice (not_isEmpty_iff.mp h_not_gamma)
+  exact IsEmpty.elim h gamma_cycle_instance

@@ -19,7 +19,7 @@ structure BetaCycle (α : Type) (G : ComputableHypergraph α) where
   cond_4: ∀ i : Fin n, E i ∈ (G.hyperedges : Finset (Finset α))
   cond_5: ∀ i : Fin n, x i ∈ (G.nodes : Finset α)
 
-def beta_acyclic_v2 (α : Type) (G : ComputableHypergraph α) := BetaCycle α G -> False
+def beta_acyclic_v2 (α : Type) (G : ComputableHypergraph α) := IsEmpty (BetaCycle α G)
 
 def findVerticesNestEdge (α : Type) [DecidableEq α] (hg : ComputableHypergraph α) : Finset α :=
   hg.nodes.filter (λ n =>
