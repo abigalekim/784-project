@@ -7,27 +7,6 @@ import Mathlib.Logic.IsEmpty
 
 open Finset
 
-def convert_beta_contrapositive (α : Type) (G : ComputableHypergraph α)
-  (bc : BetaCycle α G) : ¬beta_acyclic_v2 α G :=
-  fun h => IsEmpty.elim h bc
-
-def convert_gamma_contrapositive (α : Type) (G : ComputableHypergraph α)
-  (bc : GammaCycle α G) : ¬gamma_acyclic_v2 α G :=
-  fun h => IsEmpty.elim h bc
-
-noncomputable def get_beta_cycle (α : Type) (G : ComputableHypergraph α)
-  (h : ¬ beta_acyclic_v2 α G) : BetaCycle α G := by
-    rw [beta_acyclic_v2] at h
-    have non_empty_beta_acyclic : Nonempty (BetaCycle α G) := not_isEmpty_iff.mp h
-    have result := Classical.choice non_empty_beta_acyclic
-    exact result
-    --have there_exists_beta_cycle : (∃ c : BetaCycle α G, beta_acyclic_v2 α G) := by sorry
-    --have beta_val := Classical.choice there_exists_beta_cycle
-    --exact beta_val
-    -- if ¬ beta_acyclic_v2 α G, then ¬(BetaCycle α G -> False)
-    -- ¬(BetaCycle α G -> False) = BetaCycle α G -> True
-    -- this implies the existence of BetaCycle α G
-
 set_option diagnostics true
 def convert_beta_to_gamma_cycle (α : Type) (G : ComputableHypergraph α)
   (h : BetaCycle α G) : GammaCycle α G := by

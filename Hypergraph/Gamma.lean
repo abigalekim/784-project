@@ -22,6 +22,11 @@ structure GammaCycle (α : Type) (G : ComputableHypergraph α) where
   cond_4: ∀ i : Fin n, x i ∈ (G.nodes : Finset α)
 
 def gamma_acyclic_v2 (α : Type) (G : ComputableHypergraph α) := IsEmpty (GammaCycle α G)
+
+def convert_gamma_contrapositive (α : Type) (G : ComputableHypergraph α)
+  (bc : GammaCycle α G) : ¬gamma_acyclic_v2 α G :=
+  fun h => IsEmpty.elim h bc
+
 def findVerticesNoHyperEdge (α : Type) [DecidableEq α] (hg : ComputableHypergraph α) :  Finset α :=
   let verticesInHyperedges : Finset α := hg.hyperedges.biUnion id
   hg.nodes \ verticesInHyperedges

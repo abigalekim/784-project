@@ -21,6 +21,17 @@ structure BetaCycle (α : Type) (G : ComputableHypergraph α) where
 
 def beta_acyclic_v2 (α : Type) (G : ComputableHypergraph α) := IsEmpty (BetaCycle α G)
 
+def convert_beta_contrapositive (α : Type) (G : ComputableHypergraph α)
+  (bc : BetaCycle α G) : ¬beta_acyclic_v2 α G :=
+  fun h => IsEmpty.elim h bc
+
+noncomputable def get_beta_cycle (α : Type) (G : ComputableHypergraph α)
+  (h : ¬ beta_acyclic_v2 α G) : BetaCycle α G := by
+    rw [beta_acyclic_v2] at h
+    have non_empty_beta_acyclic : Nonempty (BetaCycle α G) := not_isEmpty_iff.mp h
+    have result := Classical.choice non_empty_beta_acyclic
+    exact result
+
 def findVerticesNestEdge (α : Type) [DecidableEq α] (hg : ComputableHypergraph α) : Finset α :=
   hg.nodes.filter (λ n =>
     let edges := hg.hyperedges.filter (λ e => n ∈ e)
