@@ -17,7 +17,8 @@ def convert_gamma_to_berg_cycle (α : Type) (G : ComputableHypergraph α)
     E_distinct := h.E_distinct,
     x := h.x,
     x_distinct := h.x_distinct,
-    cond_1 := h.cond_1
+    cond_1 := h.cond_1,
+    cond_2 := h.cond_3
   }
   exact g
 
