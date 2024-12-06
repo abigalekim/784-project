@@ -9,15 +9,16 @@ structure BetaCycle (α : Type) (G : ComputableHypergraph α) where
   E_distinct : ∀ i j : Fin n, E i ≠ E j
   x : Fin n -> α
   x_distinct : ∀ i j : Fin n, x i ≠ x j
-  cond_1 : ∀ i : Nat, ∀ j : Nat, (i_lt : i < n - 1 ∧ j < n ∧ j ≠ i ∧ j ≠ i + 1) →
+  cond_1:  ∀ i : Nat, (i_lt : i < n - 1) →
     x ⟨i,by omega⟩ ∈ E ⟨i,by omega⟩ ∧
-    x ⟨i, by omega⟩ ∈ E ⟨i+1, by omega⟩ ∧
+    x ⟨i, by omega⟩ ∈ E ⟨i+1, by omega⟩
+  cond_2 : ∀ i : Nat, ∀ j : Nat, (i_lt : i < n - 1 ∧ j < n ∧ j ≠ i ∧ j ≠ i + 1) →
     x ⟨i, by omega⟩ ∉ E ⟨j, by omega⟩
-  cond_2 : x ⟨n - 1, by omega⟩ ∈ E ⟨n - 1, by omega⟩ ∧
+  cond_3 : x ⟨n - 1, by omega⟩ ∈ E ⟨n - 1, by omega⟩ ∧
     x ⟨n - 1, by omega⟩ ∈ E ⟨0, by omega⟩
-  cond_3: ∀ j : Nat, (j_cond : j < n ∧ j ≠ n - 1 ∧ j ≠ 0) →  x ⟨n - 1, by omega⟩ ∉ E ⟨j, by omega⟩
-  cond_4: ∀ i : Fin n, E i ∈ (G.hyperedges : Finset (Finset α))
-  cond_5: ∀ i : Fin n, x i ∈ (G.nodes : Finset α)
+  cond_4: ∀ j : Nat, (j_cond : j < n ∧ j ≠ n - 1 ∧ j ≠ 0) →  x ⟨n - 1, by omega⟩ ∉ E ⟨j, by omega⟩
+  cond_5: ∀ i : Fin n, E i ∈ (G.hyperedges : Finset (Finset α))
+  cond_6: ∀ i : Fin n, x i ∈ (G.nodes : Finset α)
 
 def beta_acyclic_v2 (α : Type) (G : ComputableHypergraph α) := IsEmpty (BetaCycle α G)
 

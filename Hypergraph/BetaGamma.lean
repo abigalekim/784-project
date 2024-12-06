@@ -19,8 +19,9 @@ def convert_beta_to_gamma_cycle (α : Type) (G : ComputableHypergraph α)
     x_distinct := h.x_distinct,
     cond_1 := h.cond_1
     cond_2 := h.cond_2,
-    cond_3 := h.cond_4,
-    cond_4 := h.cond_5
+    cond_3 := h.cond_3,
+    cond_4 := h.cond_5,
+    cond_5 := h.cond_6
   }
   exact g
 
