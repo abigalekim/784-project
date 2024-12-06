@@ -22,7 +22,7 @@ def get_beta_cycle (α : Type) (G : ComputableHypergraph α)
 
 set_option diagnostics true
 def convert_beta_to_gamma_cycle (α : Type) (G : ComputableHypergraph α)
-  BetaCycle α G : GammaCycle α G := by sorry
+  (bc : BetaCycle α G) : GammaCycle α G := by sorry
 
 theorem converse_gamma_implies_beta {α : Type} [DecidableEq α] (G : ComputableHypergraph α)
   (h : ¬ beta_acyclic_v2 α G) : ¬ gamma_acyclic_v2 α G := by
