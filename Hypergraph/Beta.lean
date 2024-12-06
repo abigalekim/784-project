@@ -2,7 +2,7 @@ import Hypergraph.Basic
 import Hypergraph.TestGraphs
 open Finset
 
-structure BetaCycle (α : Type) [DecidableEq α] (G : ComputableHypergraph α) where
+structure BetaCycle (α : Type) (G : ComputableHypergraph α) where
   n : Nat
   hn : n >= 3
   E : Fin n -> Finset α
@@ -20,7 +20,7 @@ structure BetaCycle (α : Type) [DecidableEq α] (G : ComputableHypergraph α) w
   cond_4: ∀ i : Fin n, E i ∈ (G.hyperedges : Finset (Finset α))
   cond_5: ∀ i : Fin n, x i ∈ (G.nodes : Finset α)
 
-def beta_acyclic_v2 (α : Type) [DecidableEq α] (G : ComputableHypergraph α) := BetaCycle α G -> False
+def beta_acyclic_v2 (α : Type) (G : ComputableHypergraph α) := BetaCycle α G -> False
 
 def findVerticesNestEdge (α : Type) [DecidableEq α] (hg : ComputableHypergraph α) : Finset α :=
   hg.nodes.filter (λ n =>

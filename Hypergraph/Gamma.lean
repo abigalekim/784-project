@@ -6,7 +6,7 @@ open Finset
 --set_option diagnostics true in
 -- is a type where a set of edges and vertices and an x that can satisfy all these conditions
 -- then there is an inhabitant of this type (there is a value of this type)
-structure GammaCycle (α : Type) [DecidableEq α] (G : ComputableHypergraph α) where
+structure GammaCycle (α : Type) (G : ComputableHypergraph α) where
   n : Nat
   hn : n >= 3
   E : Fin n -> Finset α
@@ -21,7 +21,7 @@ structure GammaCycle (α : Type) [DecidableEq α] (G : ComputableHypergraph α) 
   cond_3: ∀ i : Fin n, E i ∈ (G.hyperedges : Finset (Finset α))
   cond_4: ∀ i : Fin n, x i ∈ (G.nodes : Finset α)
 
-def gamma_acyclic_v2 (α : Type) [DecidableEq α] (G : ComputableHypergraph α) := GammaCycle α G -> False
+def gamma_acyclic_v2 (α : Type) (G : ComputableHypergraph α) := GammaCycle α G -> False
 
 def findVerticesNoHyperEdge (α : Type) [DecidableEq α] (hg : ComputableHypergraph α) :  Finset α :=
   let verticesInHyperedges : Finset α := hg.hyperedges.biUnion id
