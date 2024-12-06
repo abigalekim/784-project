@@ -2,6 +2,7 @@ import Hypergraph.Basic
 import Hypergraph.Beta
 import Hypergraph.Gamma
 import Mathlib.Tactic.Contrapose
+import Init.Classical
 
 open Finset
 
@@ -15,14 +16,29 @@ def convert_gamma_contrapositive (α : Type) (G : ComputableHypergraph α)
 
 def get_beta_cycle (α : Type) (G : ComputableHypergraph α)
   (h : ¬ beta_acyclic_v2 α G) : BetaCycle α G := by sorry
-  --have h_contra : ¬ (BetaCycle α G -> False) := by
-  --  simp [*]
-  --  exact h
-  --Classical.choose h_contra
+    --have there_exists_beta_cycle : (∃ c : BetaCycle α G, beta_acyclic_v2 α G) := by sorry
+    --have beta_val := Classical.choice there_exists_beta_cycle
+    --exact beta_val
+    -- if ¬ beta_acyclic_v2 α G, then ¬(BetaCycle α G -> False)
+    -- ¬(BetaCycle α G -> False) = BetaCycle α G -> True
+    -- this implies the existence of BetaCycle α G
 
 set_option diagnostics true
 def convert_beta_to_gamma_cycle (α : Type) (G : ComputableHypergraph α)
-  (bc : BetaCycle α G) : GammaCycle α G := by sorry
+  (h : BetaCycle α G) : GammaCycle α G := by
+  let g : GammaCycle α G := {
+    n := h.n,
+    hn := h.hn,
+    E := h.E,
+    E_distinct := h.E_distinct,
+    x := h.x,
+    x_distinct := h.x_distinct,
+    cond_1 := h.cond_1
+    cond_2 := h.cond_2,
+    cond_3 := h.cond_4,
+    cond_4 := h.cond_5
+  }
+  exact g
 
 theorem converse_gamma_implies_beta {α : Type} [DecidableEq α] (G : ComputableHypergraph α)
   (h : ¬ beta_acyclic_v2 α G) : ¬ gamma_acyclic_v2 α G := by

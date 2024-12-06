@@ -13,10 +13,9 @@ structure BetaCycle (α : Type) (G : ComputableHypergraph α) where
     x ⟨i,by omega⟩ ∈ E ⟨i,by omega⟩ ∧
     x ⟨i, by omega⟩ ∈ E ⟨i+1, by omega⟩ ∧
     x ⟨i, by omega⟩ ∉ E ⟨j, by omega⟩
-  cond_2 : ∀ j : Nat, (j_cond : j < n ∧ j ≠ n - 1 ∧ j ≠ 0) →
-    x ⟨n - 1, by omega⟩ ∈ E ⟨n - 1, by omega⟩ ∧
-    x ⟨n - 1, by omega⟩ ∈ E ⟨0, by omega⟩ ∧
-    x ⟨n - 1, by omega⟩ ∉ E ⟨j, by omega⟩
+  cond_2 : x ⟨n - 1, by omega⟩ ∈ E ⟨n - 1, by omega⟩ ∧
+    x ⟨n - 1, by omega⟩ ∈ E ⟨0, by omega⟩
+  cond_3: ∀ j : Nat, (j_cond : j < n ∧ j ≠ n - 1 ∧ j ≠ 0) →  x ⟨n - 1, by omega⟩ ∉ E ⟨j, by omega⟩
   cond_4: ∀ i : Fin n, E i ∈ (G.hyperedges : Finset (Finset α))
   cond_5: ∀ i : Fin n, x i ∈ (G.nodes : Finset α)
 
