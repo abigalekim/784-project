@@ -6,11 +6,11 @@ where:
 - $E$ is a set of hyperedges, where each hyperedge is a subset of $V$, i.e., $E \subseteq \mathcal{P}(V)$.
 
 # Alpha $\alpha$ Cycle
-An **alpha cycle** is a sequence of hyperedges $(E_1, E_2, \ldots, E_k)$ such that:
-1. For each pair of consecutive hyperedges $E_i$ and $E_{i+1}$ (we identify $E_{n+1}$ with $E_1$), their intersection is non-empty:
-   $$e_i \cap e_{i+1} \neq \emptyset, \quad \forall i \in \{1, 2, \ldots, k\}$$
-2. All hyperedges in the cycle are distinct:
-   $$e_i \neq e_j \quad\text{for } i \neq j$$
+An **alpha cycle** is a sequence of hyperedges $(E_1, E_2, \ldots, E_k) (k\geq 3)$ where the $E_i$ are distincet hypergraphs:
+1. For each pair of $E_i$ and $E_{i+1}$ (we identify $E_{n+1}$ with $E_1$), their intersection is non-empty and is $\alpha$ neighboring (there is no suquence of neighborhood between them):
+   $$E_i \cap E_{i+1} \neq \emptyset, \quad \forall i \in \{1, 2, \ldots, k\}$$
+2. Not exist $a,b$ such that
+   $$E_a \cap E_{a+1} \in E_b \cap E_{b+1}$$
 
 # Beta $\beta$ Cycle
 A **beta cycle** is a sequence $(E_1, x_1,\cdots, E_n, x_n) (n\geq 3)$ where the $E_i$ are distinct hyperedges and the $x_i$ are distinct vertices, and satisfying the following properties:
