@@ -13,11 +13,11 @@ An **alpha cycle** is a sequence of hyperedges $(E_1, E_2, \ldots, E_k) (k\geq 3
    $$E_a \cap E_{a+1} \in E_b \cap E_{b+1}$$
 
 # Beta $\beta$ Cycle
-A **beta cycle** is a sequence $(E_1, x_1,\cdots, E_n, x_n) (n\geq 3)$ where the $E_i$ are distinct hyperedges and the $x_i$ are distinct vertices, and satisfying the following properties:
+A **beta cycle** is a sequence $(E_1, x_1,\cdots, E_n, x_n, E_{n+1}) (n\geq 3)$ where the $E_i$ are distinct hyperedges and the $x_i$ are distinct vertices, and satisfying the following properties:
 1. for all $i \in [1, n-1]$, $x_i$ belongs to $E_i$ and $E_{i+1}$ and no other $E_i$
 
 # Gamma $\gamma$ Cycle
-A **gamma cycle** is a sequence $(E_1, x_1,\cdots, E_n, x_n) (n\geq 3)$ where the $E_i$ are distinct hyperedges and the $x_i$ are distinct vertices, and satisfying the following properties:
+A **gamma cycle** is a sequence $(E_1, x_1,\cdots, E_n, x_n, E_{n+1}) (n\geq 3)$ where the $E_i$ are distinct hyperedges and the $x_i$ are distinct vertices, and satisfying the following properties:
 1. for all $i \in [1, n-1]$, $x_i$ belongs to $E_i$ and $E_{i+1}$ and no other $E_i$
 2. $x_n$ belongs to $E_n$ and $E_1$ (and possibly to other $E_j$)
 
