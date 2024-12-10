@@ -7,12 +7,11 @@ import Mathlib.Logic.IsEmpty
 
 open Finset
 
-set_option diagnostics true
 def convert_gamma_to_berg_cycle (α : Type) (G : ComputableHypergraph α)
   (h : GammaCycle α G) : BergCycle α G := by
   let g : BergCycle α G := {
     n := h.n,
-    hn := h.hn,
+    hn := le_trans (by decide) h.hn,
     E := h.E,
     E_distinct := h.E_distinct,
     x := h.x,

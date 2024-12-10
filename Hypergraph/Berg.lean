@@ -4,7 +4,7 @@ open Finset
 
 structure BergCycle (α : Type) (G : ComputableHypergraph α) where
   n : Nat
-  hn : n >= 3
+  hn : n >= 2
   E : Fin n -> Finset α
   E_distinct : ∀ i j : Fin n, E i ≠ E j
   x : Fin n -> α
