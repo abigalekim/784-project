@@ -21,14 +21,16 @@ A **gamma cycle** is a sequence $(E_1, x_1,\cdots, E_n, x_n, E_{n+1}) (n\geq 3)$
 1. for all $i \in [1, n-1]$, $x_i$ belongs to $E_i$ and $E_{i+1}$ and no other $E_i$
 2. $x_n$ belongs to $E_n$ and $E_1$ (and possibly to other $E_j$)
 
-
+# Berge Cycle
+A **Berge cycle** is a sequence $(E_1, x_1,\cdots, E_n, x_n, E_{n+1}) (n\geq 2)$ where the $E_i$ are distinct hyperedges and the $x_i$ are distinct vertices, and satisfying the following properties:
+1. For all $i \in [1, n]$, $x_i$ in $E_i$ and $E_{i+1}$
 
 # Relationships
 Cycle restriction:
-$$\alpha \subset \beta \subset \gamma$$
+$$\alpha \subset \beta \subset \gamma \subset Berge$$
 
 Acyclicity:
-$$\gamma \subset \beta \subset \alpha$$
+$$Berge \subset \gamma \subset \beta \subset \alpha$$
 
 # Example (Acylic)
 ![example](./img/example.png)
