@@ -50,6 +50,61 @@ def isAlphaAcylic (α : Type) [DecidableEq α] (hg : ComputableHypergraph α) : 
   let finalGraph := recursiveRemoval α hg
   ¬ finalGraph.nodes.Nonempty
 
+-------------------------------------------------------------
+-- Alpha acyclicity (Brault-Baron, "Hypergraph Acyclicity  --
+-- Revisited", arXiv:1403.7076, Definitions 1 and 2)       --
+-------------------------------------------------------------
+
+-- Induced subhypergraph: H[S] = {e ∩ S | e ∈ H} \ {∅}
+def inducedEdges (α : Type) [DecidableEq α] (G : ComputableHypergraph α) (S : Finset α) :
+    Finset (Finset α) :=
+  (G.hyperedges.image (· ∩ S)).filter (·.Nonempty)
+
+-- Minimization: M(H) = {e ∈ H | ∄ f ∈ H, e ⊂ f}, the edges maximal for inclusion
+def maximalEdges (α : Type) [DecidableEq α] (H : Finset (Finset α)) : Finset (Finset α) :=
+  H.filter (fun e => ∀ f ∈ H, ¬ e ⊂ f)
+
+-- x and y are neighbours when some edge contains both
+def areNeighbours (α : Type) (G : ComputableHypergraph α) (x y : α) : Prop :=
+  ∃ e ∈ G.hyperedges, x ∈ e ∧ y ∈ e
+
+-- A clique is a set of vertices that are pairwise neighbours
+def isClique (α : Type) (G : ComputableHypergraph α) (K : Finset α) : Prop :=
+  K ⊆ G.nodes ∧ ∀ x ∈ K, ∀ y ∈ K, areNeighbours α G x y
+
+-- A hypergraph is conformal when each of its (non-empty) cliques is included in an edge
+def isConformal (α : Type) (G : ComputableHypergraph α) : Prop :=
+  ∀ K : Finset α, K.Nonempty → isClique α G K → ∃ e ∈ G.hyperedges, K ⊆ e
+
+-- Successor of i in the cyclic order 0 → 1 → ... → n-1 → 0
+def cycleNext {n : Nat} (i : Fin n) : Fin n :=
+  if h : i.val + 1 < n then ⟨i.val + 1, h⟩ else ⟨0, by have := i.isLt; omega⟩
+
+theorem cycleNext_val {n : Nat} (i : Fin n) :
+    (cycleNext i).val = if i.val + 1 < n then i.val + 1 else 0 := by
+  unfold cycleNext; split <;> rfl
+
+-- Edges of the usual graph cycle on t: {{t_i, t_{i+1}} | 1 ≤ i < n} ∪ {{t_n, t_1}}
+def graphCycleEdges (α : Type) [DecidableEq α] {n : Nat} (t : Fin n → α) : Finset (Finset α) :=
+  Finset.univ.image (fun i => ({t i, t (cycleNext i)} : Finset α))
+
+-- A tuple (t_1, ..., t_n) of pairwise distinct vertices is a cycle of H when
+-- M(H[{t_i | 1 ≤ i ≤ n}]) = {{t_i, t_{i+1}} | 1 ≤ i < n} ∪ {{t_n, t_1}}
+structure HypergraphCycle (α : Type) [DecidableEq α] (G : ComputableHypergraph α) where
+  n : Nat
+  hn : n >= 3
+  t : Fin n → α
+  t_injective : Function.Injective t
+  t_nodes : ∀ i : Fin n, t i ∈ G.nodes
+  is_cycle : maximalEdges α (inducedEdges α G (Finset.univ.image t)) = graphCycleEdges α t
+
+def isCycleFree (α : Type) [DecidableEq α] (G : ComputableHypergraph α) : Prop :=
+  IsEmpty (HypergraphCycle α G)
+
+-- A hypergraph is alpha acyclic iff it is both conformal and cycle-free
+def alpha_acyclic_v2 (α : Type) [DecidableEq α] (G : ComputableHypergraph α) : Prop :=
+  isConformal α G ∧ isCycleFree α G
+
 ----------------
 -- Unit Tests --
 ----------------
@@ -91,3 +146,11 @@ def hypergraphAfterRemoveIncludedEdges := removeIncludedHyperedges ℕ sampleHyp
 #eval isAlphaAcylic ℕ braultBaronDHyperGraph   -- Expected false
 #eval isAlphaAcylic ℕ braultBaronEHyperGraph   -- Expected false
 #eval isAlphaAcylic ℕ braultBaronFHyperGraph   -- Expected false
+
+-- alpha_acyclic_v2 is not vacuous: the triangle {01, 02, 12} (Brault-Baron Fig. 2f)
+-- has the clique {0, 1, 2}, which lies in no edge, so it is not conformal
+example : ¬ alpha_acyclic_v2 ℕ braultBaronFHyperGraph := by
+  intro ⟨h_conf, _⟩
+  obtain ⟨e, he, h_sub⟩ := h_conf {0, 1, 2} ⟨0, by decide⟩
+    ⟨by decide, by unfold areNeighbours; decide⟩
+  revert h_sub; revert e; decide

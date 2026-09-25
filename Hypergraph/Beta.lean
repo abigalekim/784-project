@@ -6,9 +6,9 @@ structure BetaCycle (α : Type) (G : ComputableHypergraph α) where
   n : Nat
   hn : n >= 3
   E : Fin n -> Finset α
-  E_distinct : ∀ i j : Fin n, E i ≠ E j
+  E_distinct : ∀ i j : Fin n, i ≠ j → E i ≠ E j
   x : Fin n -> α
-  x_distinct : ∀ i j : Fin n, x i ≠ x j
+  x_distinct : ∀ i j : Fin n, i ≠ j → x i ≠ x j
   cond_1:  ∀ i : Nat, (i_lt : i < n - 1) →
     x ⟨i,by omega⟩ ∈ E ⟨i,by omega⟩ ∧
     x ⟨i, by omega⟩ ∈ E ⟨i+1, by omega⟩
